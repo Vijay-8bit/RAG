@@ -1,6 +1,6 @@
-.env/
+.env
 env
-__pycache__/
+__pycache__
 2.docx
 Opkey Question Bank.xlsx
 Opkey's Redwood Migration Feature (1).docx
