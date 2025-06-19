@@ -1,9 +1,17 @@
 from Vector_db import retrieve_from_qdrant
+import logging
+
+logging.basicConfig(
+    filename="app_logs.log",  # Log file name
+    level=logging.DEBUG,      # Log level
+    format="%(asctime)s - %(levelname)s - %(message)s"  # Log format
+)
 
 def retrieve_context(query):
     """ Retrieves query result from Qdrant"""
     results = retrieve_from_qdrant(query)
-    print("DEBUG: Retrieved results:", results)
+
+    # logging.info(f"Retrieved results: {results}")
 
     context = ''
     if results:
@@ -13,7 +21,8 @@ def retrieve_context(query):
                 context += f"Q:{payload['question']}\nA:{payload['response']}\n"
             elif 'content' in payload:
                 context += f"{payload['content']}\n"
-        
+
+    logging.info(f"Generated context  in Prompt file: {context}")    
     # print(f"DEBUG  context: {context}")
 
     prompt = f"""

@@ -6,10 +6,17 @@ import os
 from tqdm import tqdm
 import requests
 from docx import Document
+import logging
 
 load_dotenv()
 
 Qclient = QdrantClient(os.getenv("QDRANT_URL"))
+
+logging.basicConfig(
+    filename="app_logs.log",  # Log file name
+    level=logging.DEBUG,      # Log level
+    format="%(asctime)s - %(levelname)s - %(message)s"  # Log format
+)
 
 
 def embed_with_ollama(texts):
@@ -104,32 +111,26 @@ def Store_Doc_to_Qdrant(path = os.getenv("PATH_TO_DOC")):
     )
 
 
-def retrieve_from_qdrant(query, top_k = 5):
-    """
-    Retrieves the most similar response from Qdrant based on the query.
-    """
+def retrieve_from_qdrant(query, top_k=5):
+
+    logging.info(f"Retrieving from Qdrant for query in Vector_db: {query}") 
+     # Log retrieval request
     query_embedding = embed_with_ollama(query)
 
     if query_embedding is None:
-        print("Failed to generate embedding for the query.")
+        logging.error("Failed to generate embedding for the query")  # Log error
         return None
     try:
         results = Qclient.search(
-            collection_name = os.getenv("QDRANT_COLLECTION_NAME"),
-            query_vector = query_embedding,
-            limit = top_k
+            collection_name=os.getenv("QDRANT_COLLECTION_NAME"),
+            query_vector=query_embedding,
+            limit=top_k
         )
 
-        # for i, hit in enumerate(results):
-        #     print(f"Result {i+1}:")
-        #     print(f"Question: {hit.payload['question']}")
-        #     print(f"Response: {hit.payload['response']}")
-        #     print(f"Score: {hit.score}\n")
-        #     print("-----")
-        
+        logging.info(f"Successfully retrieved results from Qdrant in Vector file: {results}")  # Log results
         return results
     except Exception as e:
-        print(f"Error retrieving from Qdrant: {e}")
+        logging.error(f"Error retrieving from Qdrant: {e}")  # Log error
         return None
 
 # if __name__ == "__main__":

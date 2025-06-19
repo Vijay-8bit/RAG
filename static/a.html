@@ -324,7 +324,7 @@
     // Connection status logic
     async function checkConnection() {
       try {
-        const res = await fetch("/send_message", {
+        const res = await fetch("/ping", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: "ping" }),
