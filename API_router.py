@@ -31,7 +31,8 @@ async def stream_response(request: Request):
                 "model": MODEL_NAME,
                 "stream":True,
                 "messages":[
-                    {"role": "user", "content": retrieve_context(user_input)}
+                    {"role": "system", "content": retrieve_context(user_input)},
+                    {"role": "user", "content": user_input}
                 ]
             },
             stream = True

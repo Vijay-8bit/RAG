@@ -104,7 +104,7 @@ def Store_Doc_to_Qdrant(path = os.getenv("PATH_TO_DOC")):
     )
 
 
-def retrieve_from_qdrant(query, top_k = 3):
+def retrieve_from_qdrant(query, top_k = 5):
     """
     Retrieves the most similar response from Qdrant based on the query.
     """
